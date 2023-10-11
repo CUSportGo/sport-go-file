@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package file;
+
+service FileService {
+  rpc UploadFile(UploadFileRequest) returns (UploadFileResponse) {}
+  rpc GetSignedURL(GetSignedURLRequest) returns (GetSignedURLResponse) {}
+}
+
+message UploadFileRequest {
+  string filename = 1;
+  bytes data = 2;
+  string userId = 3;
+}
+
+message UploadFileResponse {
+  string url = 1;
+}
+
+message GetSignedURLRequest {
+  string filename = 1;
+  string userId = 2;
+}
+
+message GetSignedURLResponse {
+  string url = 1;
+}
