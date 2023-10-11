@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:15.1-alpine3.17
+    container_name: cu-sportgo-file
+    restart: unless-stopped
+    env_file:
+        - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '${POSTGRES_PORT}:5432'
+volumes:
+  postgres:
