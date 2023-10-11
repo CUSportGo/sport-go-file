@@ -18,16 +18,18 @@ export class FileService implements FileServiceController {
 
   async uploadFile(request: UploadFileRequest): Promise<UploadFileResponse> {
     try {
-      await this.gcsClient.upload(request.filename, request.data);
+      const time = Date.now();
+      const filename = `${request.userId}/${time}-${request.filename}`;
+      await this.gcsClient.upload(filename, request.data);
 
       const fileId = uuidv4();
       await this.fileRepo.create({
         id: fileId,
-        filename: request.filename,
+        filename: filename,
         ownerId: request.userId,
       });
 
-      const url = await this.gcsClient.getSignedURL(request.filename);
+      const url = await this.gcsClient.getSignedURL(filename);
       return { url: url };
     } catch (error) {
       console.log(error);
