@@ -27,6 +27,8 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/microservices": "^10.2.7",
     "@nestjs/platform-express": "^9.0.0",
+    "@prisma/client": "5.4.2",
+    "prisma": "^5.4.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "ts-proto": "^1.161.1"
@@ -70,5 +72,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "schema": "src/database/schema.prisma"
   }
 }
