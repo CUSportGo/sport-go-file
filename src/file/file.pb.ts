@@ -7,6 +7,7 @@ export const protobufPackage = "file";
 export interface UploadFileRequest {
   filename: string;
   data: Uint8Array;
+  fileType: string;
   userId: string;
 }
 

@@ -10,7 +10,8 @@ service FileService {
 message UploadFileRequest {
   string filename = 1;
   bytes data = 2;
-  string userId = 3;
+  string fileType = 3;
+  string userId = 4;
 }
 
 message UploadFileResponse {
