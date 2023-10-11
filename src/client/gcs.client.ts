@@ -3,7 +3,6 @@ import { status } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Stream } from 'stream';
-import storageConfig from '../config/google-cloud-config';
 
 @Injectable()
 export class GCSClient {
@@ -13,13 +12,9 @@ export class GCSClient {
 
   constructor() {
     this.storage = new Storage({
-      projectId: storageConfig.projectId,
-      credentials: {
-        client_email: storageConfig.client_email,
-        private_key: storageConfig.private_key,
-      },
+      keyFilename: 'gcs-service-account.json',
     });
-    this.bucketName = storageConfig.mediaBucket;
+    this.bucketName = process.env.STORAGE_MEDIA_BUCKET;
     this.bucket = this.storage.bucket(this.bucketName);
   }
 
