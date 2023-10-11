@@ -12,7 +12,7 @@ datasource db {
 
 model File {
   id        String   @id
-  filename  String
+  filename  String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ownerId   String
