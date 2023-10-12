@@ -12,4 +12,10 @@ export class FileRepository {
       data: createFile,
     });
   }
+
+  async getFile(filename: string, ownerId: string): Promise<File> {
+    return await this.db.file.findFirst({
+      where: { filename: filename, ownerId: ownerId },
+    });
+  }
 }
