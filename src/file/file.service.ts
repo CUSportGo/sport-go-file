@@ -42,7 +42,31 @@ export class FileService implements FileServiceController {
       throw error;
     }
   }
-  getSignedUrl(request: GetSignedURLRequest): Promise<GetSignedURLResponse> {
-    throw new Error('Method not implemented.');
+  async getSignedUrl(
+    request: GetSignedURLRequest,
+  ): Promise<GetSignedURLResponse> {
+    try {
+      const file = await this.fileRepo.getFile(
+        request.filename,
+        request.userId,
+      );
+      if (!file) {
+        throw new RpcException({
+          code: status.PERMISSION_DENIED,
+          message: 'Forbidden permission',
+        });
+      }
+      const url = await this.gcsClient.getSignedURL(request.filename);
+      return { url: url };
+    } catch (error) {
+      console.log(error);
+      if (!(error instanceof RpcException)) {
+        throw new RpcException({
+          code: status.INTERNAL,
+          message: 'Internal server error',
+        });
+      }
+      throw error;
+    }
   }
 }
