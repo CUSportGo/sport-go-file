@@ -12,6 +12,7 @@ export interface UploadFileRequest {
 
 export interface UploadFileResponse {
   url: string;
+  filename: string;
 }
 
 export interface GetSignedURLRequest {

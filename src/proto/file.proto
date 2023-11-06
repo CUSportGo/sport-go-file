@@ -15,6 +15,7 @@ message UploadFileRequest {
 
 message UploadFileResponse {
   string url = 1;
+  string filename= 2;
 }
 
 message GetSignedURLRequest {

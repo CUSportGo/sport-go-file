@@ -30,7 +30,7 @@ export class FileService implements FileServiceController {
       });
 
       const url = await this.gcsClient.getSignedURL(filename);
-      return { url: url };
+      return { url: url, filename: filename };
     } catch (error) {
       console.log(error);
       if (!(error instanceof RpcException)) {
