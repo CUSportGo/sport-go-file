@@ -4,7 +4,18 @@ package file;
 
 service FileService {
   rpc UploadFile(UploadFileRequest) returns (UploadFileResponse) {}
+  rpc UploadMultipleFile(UploadMultipleFileRequest) returns (UploadMultipleFileResponse) {}
   rpc GetSignedURL(GetSignedURLRequest) returns (GetSignedURLResponse) {}
+}
+
+message ImageData {
+  string filename = 1;
+  bytes data = 2;
+}
+
+message ImageURL {
+  string url = 1;
+  string filename = 2;
 }
 
 message UploadFileRequest {
@@ -16,6 +27,15 @@ message UploadFileRequest {
 message UploadFileResponse {
   string url = 1;
   string filename= 2;
+}
+
+message UploadMultipleFileRequest {
+  repeated ImageData images = 1;
+  string userId = 2;
+}
+
+message UploadMultipleFileResponse {
+  repeated ImageURL imageUrls = 1; 
 }
 
 message GetSignedURLRequest {

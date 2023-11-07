@@ -7,8 +7,11 @@ import {
   FileServiceController,
   GetSignedURLRequest,
   GetSignedURLResponse,
+  ImageData,
   UploadFileRequest,
   UploadFileResponse,
+  UploadMultipleFileRequest,
+  UploadMultipleFileResponse,
 } from './file.pb';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -42,6 +45,34 @@ export class FileService implements FileServiceController {
       throw error;
     }
   }
+
+  async uploadMultipleFile(
+    request: UploadMultipleFileRequest,
+  ): Promise<UploadMultipleFileResponse> {
+    try {
+      let result: UploadMultipleFileResponse = { imageUrls: [] };
+      await Promise.all(
+        request.images.map(async (image: ImageData) => {
+          const imageUrl = await this.uploadFile({
+            ...image,
+            userId: request.userId,
+          });
+          result.imageUrls.push(imageUrl);
+        }),
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+      if (!(error instanceof RpcException)) {
+        throw new RpcException({
+          code: status.INTERNAL,
+          message: 'Internal server error',
+        });
+      }
+      throw error;
+    }
+  }
+
   async getSignedUrl(
     request: GetSignedURLRequest,
   ): Promise<GetSignedURLResponse> {
