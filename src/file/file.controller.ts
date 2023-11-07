@@ -6,6 +6,8 @@ import {
   GetSignedURLResponse,
   UploadFileRequest,
   UploadFileResponse,
+  UploadMultipleFileRequest,
+  UploadMultipleFileResponse,
 } from './file.pb';
 import { FileService } from './file.service';
 
@@ -16,6 +18,13 @@ export class FileController {
   @GrpcMethod('FileService', 'UploadFile')
   uploadFile(request: UploadFileRequest): Promise<UploadFileResponse> {
     return this.fileService.uploadFile(request);
+  }
+
+  @GrpcMethod('FileService', 'UploadMultipleFile')
+  uploadMultipleFile(
+    request: UploadMultipleFileRequest,
+  ): Promise<UploadMultipleFileResponse> {
+    return this.fileService.uploadMultipleFile(request);
   }
 
   @GrpcMethod('FileService', 'GetSignedURL')
