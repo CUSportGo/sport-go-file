@@ -11,7 +11,9 @@ async function bootstrap() {
     options: {
       package: 'file',
       protoPath: join(__dirname, 'proto/file.proto'),
-      url: 'localhost:8086',
+      url: `0.0.0.0:${
+        process.env.FILE_GRPC_PORT ? parseInt(process.env.FILE_GRPC_PORT) : 8086
+      }`,
     },
   };
   app.connectMicroservice(fileGprcOption);
