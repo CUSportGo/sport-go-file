@@ -5,9 +5,6 @@ on:
     branches:
      - dev
      - main
-  pull_request:
-    branches:
-      - dev
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -150,7 +147,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - name: Update image version
-        working-directory: ${{ env.GITOPS_APPLICATION_NAME }}/overlays/dev
+        working-directory: ${{ env.GITOPS_APPLICATION_NAME }}/overlays/${{ github.ref_name }}
         run: |
           kustomize edit set image ${{ steps.string.outputs.lowercase }}=${{ steps.string.outputs.lowercase }}:${{ needs.build.outputs.IMAGE_TAG }}
       
