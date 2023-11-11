@@ -4,6 +4,8 @@ import { throws } from 'assert';
 import {
   GetSignedURLRequest,
   GetSignedURLResponse,
+  GetSportAreaImageURLRequest,
+  GetSportAreaImageURLResponse,
   UploadFileRequest,
   UploadFileResponse,
   UploadMultipleFileRequest,
@@ -30,5 +32,12 @@ export class FileController {
   @GrpcMethod('FileService', 'GetSignedURL')
   getSignedUrl(request: GetSignedURLRequest): Promise<GetSignedURLResponse> {
     return this.fileService.getSignedUrl(request);
+  }
+
+  @GrpcMethod('FileService', 'GetSportAreaImageURL')
+  getSportAreaImageUrl(
+    request: GetSportAreaImageURLRequest,
+  ): Promise<GetSportAreaImageURLResponse> {
+    return this.fileService.getSportAreaImageUrl(request);
   }
 }
