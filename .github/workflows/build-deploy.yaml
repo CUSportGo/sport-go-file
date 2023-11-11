@@ -15,7 +15,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   GITOPS_REPO: CUSportGo/sport-go-gitops
-  GIPOPS_APPLICATION_NAME: file
+  GITOPS_APPLICATION_NAME: file
 
 
 jobs:
@@ -145,7 +145,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - name: Update image version
-        working-directory: ${{ env.GITOPS_APPLICATION_NAME }}/overlays/${{ github.ref_name }}
+        working-directory: ${{ env.GITOPS_APPLICATION_NAME }}/overlays/dev
         run: |
           kustomize edit set image ${{ needs.build.outputs.IMAGE_NAME }}=${{ needs.build.outputs.IMAGE_NAME }}:${{ needs.build.outputs.IMAGE_TAG }}
       
