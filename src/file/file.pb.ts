@@ -43,6 +43,14 @@ export interface GetSignedURLResponse {
   url: string;
 }
 
+export interface GetSportAreaImageURLRequest {
+  filenames: string[];
+}
+
+export interface GetSportAreaImageURLResponse {
+  imageUrls: ImageURL[];
+}
+
 export const FILE_PACKAGE_NAME = "file";
 
 export interface FileServiceClient {
@@ -51,6 +59,8 @@ export interface FileServiceClient {
   uploadMultipleFile(request: UploadMultipleFileRequest): Observable<UploadMultipleFileResponse>;
 
   getSignedUrl(request: GetSignedURLRequest): Observable<GetSignedURLResponse>;
+
+  getSportAreaImageUrl(request: GetSportAreaImageURLRequest): Observable<GetSportAreaImageURLResponse>;
 }
 
 export interface FileServiceController {
@@ -65,11 +75,15 @@ export interface FileServiceController {
   getSignedUrl(
     request: GetSignedURLRequest,
   ): Promise<GetSignedURLResponse> | Observable<GetSignedURLResponse> | GetSignedURLResponse;
+
+  getSportAreaImageUrl(
+    request: GetSportAreaImageURLRequest,
+  ): Promise<GetSportAreaImageURLResponse> | Observable<GetSportAreaImageURLResponse> | GetSportAreaImageURLResponse;
 }
 
 export function FileServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["uploadFile", "uploadMultipleFile", "getSignedUrl"];
+    const grpcMethods: string[] = ["uploadFile", "uploadMultipleFile", "getSignedUrl", "getSportAreaImageUrl"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("FileService", method)(constructor.prototype[method], method, descriptor);
