@@ -7,6 +7,8 @@ import {
   FileServiceController,
   GetSignedURLRequest,
   GetSignedURLResponse,
+  GetSportAreaImageURLRequest,
+  GetSportAreaImageURLResponse,
   ImageData,
   UploadFileRequest,
   UploadFileResponse,
@@ -89,6 +91,30 @@ export class FileService implements FileServiceController {
       }
       const url = await this.gcsClient.getSignedURL(request.filename);
       return { url: url };
+    } catch (error) {
+      console.log(error);
+      if (!(error instanceof RpcException)) {
+        throw new RpcException({
+          code: status.INTERNAL,
+          message: 'Internal server error',
+        });
+      }
+      throw error;
+    }
+  }
+
+  async getSportAreaImageUrl(
+    request: GetSportAreaImageURLRequest,
+  ): Promise<GetSportAreaImageURLResponse> {
+    try {
+      let result: GetSportAreaImageURLResponse = { imageUrls: [] };
+      await Promise.all(
+        request.filenames.map(async (filename: string) => {
+          const imageUrl = await this.gcsClient.getSignedURL(filename);
+          result.imageUrls.push({ filename: filename, url: imageUrl });
+        }),
+      );
+      return result;
     } catch (error) {
       console.log(error);
       if (!(error instanceof RpcException)) {

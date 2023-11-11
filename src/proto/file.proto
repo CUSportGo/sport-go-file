@@ -6,6 +6,7 @@ service FileService {
   rpc UploadFile(UploadFileRequest) returns (UploadFileResponse) {}
   rpc UploadMultipleFile(UploadMultipleFileRequest) returns (UploadMultipleFileResponse) {}
   rpc GetSignedURL(GetSignedURLRequest) returns (GetSignedURLResponse) {}
+  rpc GetSportAreaImageURL(GetSportAreaImageURLRequest) returns (GetSportAreaImageURLResponse) {}
 }
 
 message ImageData {
@@ -45,4 +46,12 @@ message GetSignedURLRequest {
 
 message GetSignedURLResponse {
   string url = 1;
+}
+
+message GetSportAreaImageURLRequest {
+  repeated string filenames = 1;
+}
+
+message GetSportAreaImageURLResponse {
+  repeated ImageURL imageUrls = 1;
 }
