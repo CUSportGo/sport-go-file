@@ -5,12 +5,17 @@ on:
     branches:
      - dev
      - main
+  pull_request:
+    branches:
+      - dev
 
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  GITOPS_REPO: CUSportGo/sport-go-gitops
+  GIPOPS_APPLICATION_NAME: file
 
 
 jobs:
@@ -121,4 +126,35 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    needs:
+      - test
+      - build
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ env.GITOPS_REPO }}
+
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Update image version
+        working-directory: ${{ env.GITOPS_APPLICATION_NAME }}/overlays/${{ github.ref_name }}
+        run: |
+          kustomize edit set image ${{ needs.build.outputs.IMAGE_NAME }}=${{ needs.build.outputs.IMAGE_NAME }}:${{ needs.build.outputs.IMAGE_TAG }}
+      
+      - name: Commit and push changes
+        uses: actions-js/push@master
+        with:
+          message: "chore: set `${{ env.GITOPS_APPLICATION_NAME }}` image tag to `${{ needs.build.outputs.IMAGE_TAG }}` in `${{ github.ref_name }}`"
+          repository: ${{ env.GITOPS_REPO }}
+          force: true
+          branch: main
+
+
 
