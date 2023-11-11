@@ -153,6 +153,7 @@ jobs:
         uses: actions-js/push@master
         with:
           message: "chore: set `${{ env.GITOPS_APPLICATION_NAME }}` image tag to `${{ needs.build.outputs.IMAGE_TAG }}` in `${{ github.ref_name }}`"
+          token: ${{ secret.GH_PAT }}
           repository: ${{ env.GITOPS_REPO }}
           force: true
           branch: main
