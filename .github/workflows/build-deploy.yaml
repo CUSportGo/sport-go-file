@@ -141,19 +141,24 @@ jobs:
           repository: ${{ env.GITOPS_REPO }}
           token: ${{ secrets.GH_PAT }}
 
+      - id: string
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ needs.build.outputs.IMAGE_NAME }}
+
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v2
 
       - name: Update image version
         working-directory: ${{ env.GITOPS_APPLICATION_NAME }}/overlays/dev
         run: |
-          kustomize edit set image ${{ needs.build.outputs.IMAGE_NAME }}=${{ needs.build.outputs.IMAGE_NAME }}:${{ needs.build.outputs.IMAGE_TAG }}
+          kustomize edit set image ${{ steps.string.outputs.lowercase }}=${{ steps.string.outputs.lowercase }}:${{ needs.build.outputs.IMAGE_TAG }}
       
       - name: Commit and push changes
         uses: actions-js/push@master
         with:
           message: "chore: set `${{ env.GITOPS_APPLICATION_NAME }}` image tag to `${{ needs.build.outputs.IMAGE_TAG }}` in `${{ github.ref_name }}`"
-          token: ${{ secrets.GH_PAT }}
+          github_token: ${{ secrets.GH_PAT }}
           repository: ${{ env.GITOPS_REPO }}
           force: true
           branch: main
